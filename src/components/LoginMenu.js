@@ -19,9 +19,9 @@ const LoginMenu = ({
         <React.Fragment>
             <CenterChild>
                 <div>
-                    ID: <input style={{ minWidth: 100 }} value={getValue('id')} onChange={handleInputChange('id')} />
+                    ID: <input value={getValue('id')} onChange={handleInputChange('id')} />
                     <br />
-                    PW: <input style={{ minWidth: 100 }} value={getValue('pw')} onChange={handleInputChange('pw')} />
+                    PW: <input value={getValue('pw')} onChange={handleInputChange('pw')} />
                     <br />
                     <button onClick={handleLocalLogin}>Local 계정으로 로그인하기</button>
                 </div>
@@ -30,6 +30,7 @@ const LoginMenu = ({
             <CenterChild>
                 <button onClick={handleSocialLogin('FB')}>페이스북 계정으로 로그인하기</button>
                 <button onClick={handleSocialLogin('NAVER')}>네이버 계정으로 로그인하기</button>
+                <button onClick={handleSocialLogin('KAKAO')}>카카오 계정으로 로그인하기</button>
             </CenterChild>
         </React.Fragment>
     );

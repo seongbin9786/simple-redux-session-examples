@@ -7,7 +7,8 @@ import {
     getUserLoggedIn,
     loginWithIdAndPw,
     loginWithSocial,
-    logout
+    logout,
+    socialLogout
 } from '../modules/SessionActions';
 
 class LoginContainer extends Component {
@@ -28,6 +29,8 @@ class LoginContainer extends Component {
     }
 
     handleSocialLogin = type => () => this.props.loginWithSocial(type);
+
+    handleSocialLogout = type => () => this.props.socialLogout(type);
 
     handleLogout = () => this.props.logout();
 
@@ -54,7 +57,8 @@ const mapStateToProps = ({ session }) => ({
 const mapDispatchToProps = {
     loginWithIdAndPw,
     loginWithSocial,
-    logout
+    logout,
+    socialLogout,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer);

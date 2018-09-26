@@ -38,32 +38,24 @@
   </script>
 
   <!-- Naver -->
-  <div id="naverIdLogin" style="display: none"></div>
   <script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js"></script>
   <script type="text/javascript">
     var naverLogin = new naver.LoginWithNaverId({
       clientId: "OmU2g887EO5cYqcG_Dwu",
-      callbackUrl: "http://localhost:3000",
+      callbackUrl: "http://localhost:3000/login/naver",
       isPopup: false, /* 팝업을 통한 연동처리 여부 */
-      loginButton: { color: "white", type: 3, height: 50 } /* 로그인 버튼의 타입을 지정 */
     });
 
     window.naverLogin = naverLogin;
 
     /* 설정정보를 초기화하고 연동을 준비 */
     window.naverLogin.init();
+  </script>
 
-    /* Callback의 처리. 정상적으로 Callback 처리가 완료될 경우 main page로 redirect(또는 Popup close) */
-    // window.addEventListener('load', function () {
-      naverLogin.getLoginStatus(function(status) {
-        if (status) {
-          console.log(naverLogin.user);
-        } else {
-          console.log("callback 처리에 실패하였습니다.");
-        }
-      });
-    // });
-
+  <!-- Kakao -->
+  <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+  <script type="text/javascript">
+    Kakao.init('18b9ad4cccb9d0af0dea0dd5e3e48fdb');
   </script>
 </body>
 

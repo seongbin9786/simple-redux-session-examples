@@ -1,6 +1,6 @@
 import mockServer from '../server/mockServer';
 import { sessionService } from 'redux-react-session';
-import SocialLoginPreProcessor from '../utils/SocialLoginPreProcessor';
+import SocialSessionPreProcessor from '../utils/SocialSessionPreProcessor';
 
 // Action Types
 const REFRESH_TOKEN = 'kubooki/session/REFRESH_TOKEN';
@@ -36,7 +36,7 @@ export const loginWithIdAndPw = (id, pw) => () => {
 export const loginWithSocial = (type) => () => {
 
   // process 과정 필요
-  SocialLoginPreProcessor.preProcess(type)
+  SocialSessionPreProcessor.preProcessLogin(type)
     .then(userObject => mockServer.socialLogin(userObject))
     .then(response => {
       sessionService.saveSession(response)
@@ -45,8 +45,15 @@ export const loginWithSocial = (type) => () => {
     });
 };
 
+export const socialLogout = type => () => {
+  SocialSessionPreProcessor.preRrocessLogout(type);
+  _deleteSession();
+}
 
-export const logout = () => () => {
+
+export const logout = () => () => _deleteSession();
+
+const _deleteSession = () => {
   sessionService.deleteSession();
   sessionService.deleteUser();
 }
