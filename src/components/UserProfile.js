@@ -1,11 +1,13 @@
 import React from 'react';
+import CenterChild from '../elements/CenterChild';
 
-const UserProfile = ({ name }) => {
+const UserProfile = ({ userInfo: { id, name }, handleLogout }) => {
     return (
-        <div>
-            <div>{`${name}님 환영합니다.`}</div>
-        </div>
+        <CenterChild>
+            <span>{`${name}[${id}]님 환영합니다.`}</span>
+            <button onClick={handleLogout}>로그아웃</button>
+        </CenterChild>
     );
 }
- 
+
 export default UserProfile;

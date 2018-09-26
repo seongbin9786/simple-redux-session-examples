@@ -1,12 +1,14 @@
+import mockServer from '../server/mockServer';
+import { sessionService } from 'redux-react-session';
+import SocialLoginPreProcessor from '../utils/SocialLoginPreProcessor';
+
 // Action Types
-const LOGIN_WITH_ID_PW = 'kubooki/session/LOGIN_WITH_ID_PW';
-const LOGIN_WITH_SOCIAL = 'kubooki/session/LOGIN_WITH_SOCIAL';
 const REFRESH_TOKEN = 'kubooki/session/REFRESH_TOKEN';
 const SAVE_SESSION = 'kubooki/session/SAVE_SESSION';
 // Load는 redux-react-session에서 자동으로 하게 된다.
 // Load 시 Validate는 직접 해야 한다. 단 이 작업은 Util 함수로 충분하다. (Action - Reducer까지 갈 이유가 없음)
 
-// Action Creators
+// Action|Thunk Creators
 /**
  * ID, PW로 로그인 시 사용할 Action이다.
  * 거북이 Local 계정으로 로그인 시 사용한다.
@@ -15,13 +17,14 @@ const SAVE_SESSION = 'kubooki/session/SAVE_SESSION';
  * @param {string} id 아이디
  * @param {string} pw 비밀번호
  */
-export const loginWithIdAndPw = (id, pw) => ({
-  type: LOGIN_WITH_ID_PW,
-  payload: {
-    id,
-    pw
-  }
-});
+export const loginWithIdAndPw = (id, pw) => () => {
+  mockServer.localLogin(id, pw)
+    .then(response => {
+      sessionService.saveSession(response)
+        .then(() => sessionService.saveUser(response))
+        .catch(error => { throw Error("loginWithIdAndPw: " + error) });
+    });
+};
 
 /**
  * 클라이언트-사이드에서 가져온 엑세스 토큰으로 로그인 시 사용할 Action이다.
@@ -30,10 +33,23 @@ export const loginWithIdAndPw = (id, pw) => ({
  * 
  * @param {string} socialAccessToken 소셜 계정 엑세스 토큰
  */
-export const loginWithSocial = socialAccessToken => ({
-  type: LOGIN_WITH_SOCIAL,
-  payload: socialAccessToken,
-});
+export const loginWithSocial = (type) => () => {
+
+  // process 과정 필요
+  SocialLoginPreProcessor.preProcess(type)
+    .then(userObject => mockServer.socialLogin(userObject))
+    .then(response => {
+      sessionService.saveSession(response)
+        .then(() => sessionService.saveUser(response))
+        .catch(error => { throw Error("loginWithSocial: " + error) });
+    });
+};
+
+
+export const logout = () => () => {
+  sessionService.deleteSession();
+  sessionService.deleteUser();
+}
 
 /**
  * Refresh Token을 사용하여 서버로부터 새 Access Token과 Refresh Token을 받아온다.
@@ -66,33 +82,7 @@ export const saveSession = (accessToken, refreshToken, userInfo) => ({
   }
 });
 
-// initialState
-const initialState = {
-  accessToken: '',
-  refreshToken: '',
-  userInfo: {}
-};
-
-// Reducers
-export default function reducer(state = initialState, action) {
-
-    console.log('reducer is called with Action:', action);
-
-    switch (action.type) {
-
-        case LOGIN_WITH_ID_PW: {
-            return {
-                ...state,
-                userInfo: action.payload,
-            }
-        }
-
-        default:
-            return state;
-  }
-}
-
 // Selectors
-export const getUserInfo = ({ userInfo }) => userInfo;
+export const getUserInfo = ({ user: { userInfo } }) => userInfo;
 
-export const getUserLoggedIn = ({ userInfo }) => userInfo !== undefined && userInfo !== null && Object.keys(userInfo).length !== 0 && userInfo.constructor !== Object;
+export const getUserLoggedIn = ({ user: { userInfo } }) => userInfo !== undefined && userInfo !== null && !(Object.keys(userInfo).length === 0 && userInfo.constructor === Object);

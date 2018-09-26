@@ -13,9 +13,7 @@ class App extends Component {
         </header>
         <div className="App-intro">
           <p>1. 의존성: Redux, React-Redux, Redux-Thunk</p>
-          <p>2. 사용 기술: JWT</p>
-          <p>3. 서버: mock에서 Promise를 반환하도록 하였습니다. (Ajax 미사용)</p>
-          <p>4. Logging을 위해 Redux-Logger를 사용하였습니다.</p>
+          <p>2. 서버: mock에서 Promise를 반환하도록 하였습니다. (Ajax 미사용)</p>
           <LoginContainer />
         </div>
       </div>

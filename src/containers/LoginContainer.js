@@ -6,17 +6,17 @@ import {
     getUserInfo,
     getUserLoggedIn,
     loginWithIdAndPw,
-    loginWithSocial
-
-} from '../modules/Session';
+    loginWithSocial,
+    logout
+} from '../modules/SessionActions';
 
 class LoginContainer extends Component {
     state = {
         id: '',
-        pw: '',        
+        pw: '',
     };
 
-    handleInputChange = name => ({ target: { value }}) => this.setState({ [name]: value });
+    handleInputChange = name => ({ target: { value } }) => this.setState({ [name]: value });
 
     getValue = name => this.state[name];
 
@@ -27,30 +27,34 @@ class LoginContainer extends Component {
         loginWithIdAndPw(id, pw);
     }
 
-    handleSocialLogin = f => f;
+    handleSocialLogin = type => () => this.props.loginWithSocial(type);
+
+    handleLogout = () => this.props.logout();
 
     render() {
         const { userInfo, isLoggedIn } = this.props;
-        
-        return isLoggedIn ? <UserProfile userInfo={userInfo} /> : <LoginMenu 
-            handleLocalLogin={this.handleLocalLogin}
-            handleSocialLogin={this.handleSocialLogin}
-            handleInputChange={this.handleInputChange}
-            getValue={this.getValue}
-        />;
+
+        return isLoggedIn ?
+            <UserProfile userInfo={userInfo} handleLogout={this.handleLogout} />
+            :
+            <LoginMenu
+                handleLocalLogin={this.handleLocalLogin}
+                handleSocialLogin={this.handleSocialLogin}
+                handleInputChange={this.handleInputChange}
+                getValue={this.getValue}
+            />;
     }
 }
 
-// Plain Object로 반환이 왜 안되는거지?
 const mapStateToProps = ({ session }) => ({
-   userInfo: getUserInfo(session),
-   isLoggedIn: getUserLoggedIn(session)
+    userInfo: getUserInfo(session),
+    isLoggedIn: getUserLoggedIn(session)
 });
 
-// Return as Plain Object
 const mapDispatchToProps = {
     loginWithIdAndPw,
-    loginWithSocial
+    loginWithSocial,
+    logout
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer);
