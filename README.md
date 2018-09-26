@@ -2,6 +2,22 @@
 
 React 환경에서 기본 로그인과 소셜 로그인을 `redux-react-session` 라이브러리를 적용하여 구현한 예제입니다.
 
+## 설계 의도
+
+1. 웹 사이트 최초 접속 시 엑세스 토큰을 요청하여 자동 로그인과 유사하게 동작하지 않도록 의도하였습니다. (로그인 흐름이 너무 복잡해지기 때문)
+
+2. 소셜 로그인은 최초 인증을 위해서만 사용하도록 의도하였습니다. 소셜 로그인은 Access Token을 백엔드 서버에 보내는 것이 목표입니다. 따라서 로그인 버튼을 누르기 전까진 인증되지 않습니다.
+
+3. 백엔드 서버는 Access Token으로 소셜 서버에 `/me` 등의 사용자 정보를 가져오는 API 요청 후 전달받은 정보로 사용자를 인증하게 됩니다.
+
+4. 이후 서버는 클라이언트로 직접 서명한 Access / Refresh Token을 제공합니다.
+
+5. [1-4]까지의 과정으로 자동 로그인, 일반 로그인의 흐름을 refresh token의 길이만으로 조절할 수 있게 되는 것이 설계 의도입니다.
+
+## 데모
+
+1. [페이스북 개발자 사이트](https://developers.facebook.com/), [네이버 개발자 사이트](https://developers.naver.com/main/), [카카오 개발자 사이트](https://developers.kakao.com/)에서 각각 앱 생성 후 웹사이트 등록(`http://localhost:3000`)하면 됩니다 :)
+
 ## 구조
 
 1. `LoginContainer[fire action]` -> `SessionActions[Action Creator + Selector]` -> `SocialSessionPreProcessor[social 작업]` -> `mockServer[가짜 백엔드 서버]` -> `LoginContainer[get info]` 순의 흐름을 갖게 됩니다.
