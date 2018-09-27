@@ -12,11 +12,17 @@ React 환경에서 기본 로그인과 소셜 로그인을 `redux-react-session`
 
 4. 이후 서버는 클라이언트로 직접 서명한 Access / Refresh Token을 제공합니다.
 
-5. [1-4]까지의 과정으로 자동 로그인, 일반 로그인의 흐름을 refresh token의 길이만으로 조절할 수 있게 되는 것이 설계 의도입니다.
+5. [1-4]까지의 과정으로 자동 로그인, 일반 로그인의 흐름을 refresh token의 길이만으로 조절할 수 있게 되는 것이 설계 의도입니다. (refresh token으로 access token refresh 시마다 refresh token도 같이 이전에 발급받은 동일한 기간으로 만료 기간을 늘리는 방식. ex - 10분짜리, 6개월짜리)
 
 ## 데모
 
 1. [페이스북 개발자 사이트](https://developers.facebook.com/), [네이버 개발자 사이트](https://developers.naver.com/main/), [카카오 개발자 사이트](https://developers.kakao.com/)에서 각각 앱 생성 후 웹사이트 등록(`http://localhost:3000`)하면 됩니다 :)
+
+## TODO
+
+1. `redux-react-session`에서 hydrate 시에 진행하는 Validation 함수를 구현해서 제공해야 함 (localstorage에 저장된 access token과 refresh token의 만료 기간을 확인하는 등)
+
+2. API 호출 도중 사용자의 access token이 만료된 경우, refresh 이후 다시 시도하는 것 (refresh token까지 만료 시 로그아웃)
 
 ## 구조
 

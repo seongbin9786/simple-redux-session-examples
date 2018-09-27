@@ -11,7 +11,7 @@ const SAVE_SESSION = 'kubooki/session/SAVE_SESSION';
 // Action|Thunk Creators
 /**
  * ID, PW로 로그인 시 사용할 Action이다.
- * 거북이 Local 계정으로 로그인 시 사용한다.
+ * Local 계정으로 로그인 시 사용한다.
  * 소셜 로그인의 경우 `loginWithSocial`을 import하여 사용해야 한다.
  * 
  * @param {string} id 아이디
@@ -28,8 +28,8 @@ export const loginWithIdAndPw = (id, pw) => () => {
 
 /**
  * 클라이언트-사이드에서 가져온 엑세스 토큰으로 로그인 시 사용할 Action이다.
- * 네이버, 카카오, 페이스북r   등의 Social 계정으로 로그인 시 사용한다.
- * 거북이 Local 계정으로 로그인 시에는 `loginWithIdAndPw`를 사용한다.
+ * 네이버, 카카오, 페이스북 등의 Social 계정으로 로그인 시 사용한다.
+ * Local 계정으로 로그인 시에는 `loginWithIdAndPw`를 사용한다.
  * 
  * @param {string} socialAccessToken 소셜 계정 엑세스 토큰
  */
@@ -70,23 +70,6 @@ const _deleteSession = () => {
 export const refreshToken = refreshToken => ({
   type: REFRESH_TOKEN,
   payload: refreshToken
-});
-
-/**
- * 서버로부터 받아온 Token과 사용자 정보를 클라이언트-사이드 세션에 저장한다.
- * 세션의 저장소는 기본적으로 localstorage를 사용한다.
- * 
- * @param {string} accessToken Access Token
- * @param {string} refreshToken Refresh Token
- * @param {object} userInfo 사용자 정보
- */
-export const saveSession = (accessToken, refreshToken, userInfo) => ({
-  type: SAVE_SESSION,
-  payload: {
-    accessToken,
-    refreshToken,
-    userInfo
-  }
 });
 
 // Selectors

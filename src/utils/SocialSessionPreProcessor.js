@@ -79,7 +79,7 @@ class SocialSessionPreProcessor {
                 const userID = -1; // 없음
                 resolve({ userID, accessToken });
             } else {
-                window.Kakao.Auth.login();
+                window.Kakao.Auth.login(res => console.log('success: ', res), error => console.log('login error:', error));
             }
         });
     });
