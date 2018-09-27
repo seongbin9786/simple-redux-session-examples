@@ -4,9 +4,6 @@ import SocialSessionPreProcessor from '../utils/SocialSessionPreProcessor';
 
 // Action Types
 const REFRESH_TOKEN = 'kubooki/session/REFRESH_TOKEN';
-const SAVE_SESSION = 'kubooki/session/SAVE_SESSION';
-// Load는 redux-react-session에서 자동으로 하게 된다.
-// Load 시 Validate는 직접 해야 한다. 단 이 작업은 Util 함수로 충분하다. (Action - Reducer까지 갈 이유가 없음)
 
 // Action|Thunk Creators
 /**
@@ -22,7 +19,7 @@ export const loginWithIdAndPw = (id, pw) => () => {
     .then(response => {
       sessionService.saveSession(response)
         .then(() => sessionService.saveUser(response))
-        .catch(error => { throw Error("loginWithIdAndPw: " + error) });
+        .catch(error => { throw Error('loginWithIdAndPw: ' + error); });
     });
 };
 
@@ -41,36 +38,21 @@ export const loginWithSocial = (type) => () => {
     .then(response => {
       sessionService.saveSession(response)
         .then(() => sessionService.saveUser(response))
-        .catch(error => { throw Error("loginWithSocial: " + error) });
+        .catch(error => { throw Error('loginWithSocial: ' + error); });
     });
 };
 
 export const socialLogout = type => () => {
   SocialSessionPreProcessor.preRrocessLogout(type);
   _deleteSession();
-}
-
+};
 
 export const logout = () => () => _deleteSession();
 
 const _deleteSession = () => {
   sessionService.deleteSession();
   sessionService.deleteUser();
-}
-
-/**
- * Refresh Token을 사용하여 서버로부터 새 Access Token과 Refresh Token을 받아온다.
- * 
- * 1. Access Token과 함께 Refresh Token도 만료 기간이 연장된다.
- * 2. 기존에 사용하던 refresh Token은 제거한다.
- * 3. localStorage에도 반영해야 한다.
- * 
- * @param {string} refreshToken 사용자가 발급받은 Refresh Token
- */
-export const refreshToken = refreshToken => ({
-  type: REFRESH_TOKEN,
-  payload: refreshToken
-});
+};
 
 // Selectors
 export const getUserInfo = ({ user: { userInfo } }) => userInfo;
